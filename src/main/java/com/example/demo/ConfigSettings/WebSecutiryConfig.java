@@ -28,14 +28,16 @@ public class WebSecutiryConfig extends WebSecurityConfigurerAdapter{  //扩展sp
     protected void configure(HttpSecurity http) throws Exception {
         //http://www.tianshouzhi.com/api/tutorials/spring_security_4/266
         //https://segmentfault.com/q/1010000010307453/a-1020000010321874
+//        http.authorizeRequests()
+//                .antMatchers( "/bootstrap/**", "/jquery/**").permitAll()//静态资源
+//                .anyRequest().authenticated().and() //所有请求需要认证及登陆后才可以访问
+//                //// 登录地址，成功跳转地址，登录失败地址
+//                .formLogin().loginPage("/login").defaultSuccessUrl("/", true).failureUrl("/login?error")
+//                .permitAll() //定制登陆行为，登陆页面任意访问
+//                .and()
+//                .logout().permitAll(); //定制注销行为，注销请求任意访问
         http.authorizeRequests()
-                .antMatchers( "/bootstrap/**", "/jquery/**").permitAll()//静态资源
-                .anyRequest().authenticated().and() //所有请求需要认证及登陆后才可以访问
-                //// 登录地址，成功跳转地址，登录失败地址
-                .formLogin().loginPage("/login").defaultSuccessUrl("/", true).failureUrl("/login?error")
-                .permitAll() //定制登陆行为，登陆页面任意访问
-                .and()
-                .logout().permitAll(); //定制注销行为，注销请求任意访问
+                .antMatchers( "/").permitAll();//所以资源
 
 
     }
