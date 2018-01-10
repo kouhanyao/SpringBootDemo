@@ -5,10 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
     <link th:href="@{/bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/jquery/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/dropzone.js}"></script>
+
+    <script type="text/javascript">
+        Dropzone.options.uploadExcel = {
+            paramName:"file",
+            uploadMultiple: false,
+            addRemoveLinks: true,
+            autoProcessQueue: true,
+            init : function() {
+                this.on("addedfile", function(file) { swal("正在发送中，请耐心等候。。。"); });
+                this.on("complete", function(resp) {
+                    var cellPhone = $.parseJSON(resp.xhr.responseText).errorNum;
+                    if(errorNum == null || errorNum == ""){
+                        swal("发送完成");
+                    }else{
+                        swal(errorNum + "，发送失败");
+                    }
+                });
+                this.on("error", function(file) {
+                    swal("发送失败");
+                });
+            }
+        };
+    </script>
 </head>
 <body>
 
 <div>login</div>
-
+<!--th:action="@{/excel/readExcel}"-->
+<form id="upload-excel" th:action="@{/excel/readExcel}" class="dropzone dz-clickable" method="POST" enctype="multipart/form-data">
+    <div class="dz-default dz-message" style="background-color: blue;width:10%;text-align: center;">
+        <input type="button" id="button" value="上传excel"/>
+    </div>
+</form>
 </body>
 </html>

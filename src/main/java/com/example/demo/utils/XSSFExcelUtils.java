@@ -13,6 +13,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Created by 寇含尧 on 2017/12/21.
+ *
+ * SXSS和XSSF均属于Apache的poi,但是sxss写数据,优势是可以写入大量的数据;而xssf既可以读,也可以写.
  */
 public class XSSFExcelUtils {
     public static void main(String[] args) {
