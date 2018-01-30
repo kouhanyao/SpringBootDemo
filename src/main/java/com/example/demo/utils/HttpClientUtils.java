@@ -19,8 +19,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 
 
@@ -28,6 +31,8 @@ import java.util.*;
  * Created by 寇含尧 on 2017/11/2.
  */
 public class HttpClientUtils {
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
+
     /**
      * 最大线程池
      */
@@ -396,5 +401,30 @@ public class HttpClientUtils {
         request.setEntity(requestJson);
         HttpResponse response = httpClient.execute(request);
         return getContentFromResponse(response);
+    }
+
+    /**
+     * 通过json方式发送post请求
+     * @param url
+     * @param json
+     * @return
+     * @throws IOException
+     */
+    public String postJson(String url, String json) throws IOException {
+        logger.debug("URL-------------" + url);
+        logger.debug("JSON-------------" + json);
+        HttpPost httpPost = new HttpPost(url);
+        StringEntity entity = new StringEntity(json, "utf-8");//解决中文乱码问题
+        entity.setContentEncoding("UTF-8");
+        entity.setContentType("application/json");
+        httpPost.setEntity(entity);
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+        try {
+            return EntityUtils.toString(response.getEntity(), Charset.forName("utf-8"));
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            response.close();
+        }
     }
 }
