@@ -69,4 +69,25 @@ public class BaseController {
     protected HttpServletRequest getRequest() {
         return ToolUtil.getRequest();
     }
+
+    /**
+     * 取得客户端ip
+     *
+     * @return
+     * @throws
+     * @author kangy
+     */
+    protected String getIp() {
+        String ip = getRequest().getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = getRequest().getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = getRequest().getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = getRequest().getRemoteAddr();
+        }
+        return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
+    }
 }
