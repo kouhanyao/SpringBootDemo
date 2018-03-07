@@ -90,4 +90,13 @@ public class ToolUtil {
 
         return "jpg,jpeg,gif,png".contains(suffix.toLowerCase());
     }
+
+    /**
+     * 判断是否为null
+     * 针对特殊的"null" 也视为null
+     * @return
+     */
+    public static boolean isNull(String string){
+        return !(string != null && !"".equals(string)) || "null".equals(string);
+    }
 }
