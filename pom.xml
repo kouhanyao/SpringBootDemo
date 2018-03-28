@@ -177,6 +177,18 @@
 			<version>3.17</version>
 		</dependency>
 
+		<!-- 第三方阿里云短信jar包 -->
+		<dependency>
+			<groupId>aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 		<!--文件上传-->
 		<!--<dependency>
 			<groupId>commons-fileupload</groupId>
