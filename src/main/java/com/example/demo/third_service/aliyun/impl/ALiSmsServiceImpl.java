@@ -30,8 +30,8 @@ public class ALiSmsServiceImpl implements ALiSmsService {
     final String product = "Dysmsapi";//短信API产品名称（短信产品名固定，无需修改）
     final String domain = "dysmsapi.aliyuncs.com";//短信API产品域名（接口地址固定，无需修改）
     final String signName = "医教云平台";//必填:短信签名-可在短信控制台中找到
-    final String accessKeyId = "LTAIrI1lVrgQVoDh";//你的accessKeyId,参考本文档步骤2
-    final String accessKeySecret = "lULU4Lqs2tsh9JsNiZSM42s4ElYlZr";//你的accessKeySecret，参考本文档步骤2
+    final String accessKeyId = "";//你的accessKeyId,参考本文档步骤2
+    final String accessKeySecret = "";//你的accessKeySecret，参考本文档步骤2
 
     @Override
     public String sendSmsMsg(String phoneNumbers, String templateCode, Map<String, Object> templateParam) {
