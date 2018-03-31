@@ -520,84 +520,6 @@ public class DateHelper {
         return calendar.getTime();
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        Date date1 = convertDate("2017/4/6 15:09:58", DATE_FORMAT_YYYYMMDDHHMMSS2);
-
-        // Date date1 = new Date();
-        // Thread.sleep(5500);
-        // Date date2 = new Date();
-
-        // System.out.println(new BigDecimal(date2.getTime()).subtract(
-        // new BigDecimal(date1.getTime())).divide(
-        // new BigDecimal(1000)).intValue());
-
-        // System.out.println(formatDate(date1,"yyyy/MM/dd HH:mm:ss"));
-        //
-        // System.out.println(compareDate(date1, date2));
-        // System.out.println(compareDate(date2, date2));
-        // System.out.println(compareDate(date2, date1));
-        // System.out.println(getFirstDateOfMonth(new Date()));
-        //
-        // System.out.println(formatDate(addMonthToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
-        // System.out.println(formatDate(addDayToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
-        // System.out.println(formatDate(addHourToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
-        // System.out.println(formatDate(addMinuteToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
-        // System.out.println(formatDate(addSecondToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
-        //
-        // System.out.println(getYearFromDate(date1));
-        // System.out.println(getMonthFromDate(date1));
-        // System.out.println(getDayFromDate(date1));
-        // System.out.println(getHourFromDate(date1));
-        // System.out.println(getMinuteFromDate(date1));
-        // System.out.println(getSecondFromDate(date1));
-        //
-        // Calendar cal = Calendar.getInstance();
-        // cal.setTime(date1);
-        // Calendar cal3 = (Calendar) cal.clone();
-        // Calendar cal4 = (Calendar) cal.clone();
-        // cal.add(Calendar.DAY_OF_YEAR, 10);
-        // Calendar cal2 = Calendar.getInstance();
-        // cal2.setTime(date2);
-        // cal3.add(Calendar.DAY_OF_YEAR, 2);
-        // cal4.add(Calendar.DAY_OF_YEAR, 4);
-        // System.out.println(date1);
-        // System.out.println(cal.getTime());
-        // System.out.println(getDaysListBetween(cal, cal3).contains(
-        // cal3.getTime()));
-        // System.out.println(getDaysListBetween(cal, cal3)
-        // .contains(cal.getTime()));
-        // System.out.println(getDaysListBetween(cal, cal3).contains(
-        // cal4.getTime()));
-        // System.out.println(compareDate(date1, date2));
-        // System.out.println(compareDate(date2, date2));
-        // System.out.println(compareDate(date2, date1));
-        // System.out.println(getFirstDateOfMonth(new Date()));
-        //
-        // Date date3 = new Date();
-        // Date date4 = DateHelper.addDayToDate(date3,2);
-        //
-        // System.out.println(getRegionDates(date3,date4));
-        // System.out.println(convertDateToString(getDate(2099, 11, 31)));
-        // System.out.println(getAge(getDate(1983, 4, 18)));
-        // System.out.println(getLastMonthFirstDate(getDate(2015, 1, 1)));
-//        System.out.println(getCurrentMonthFirstDate(null));
-        System.out.println(DateHelper.formatDate(date1, DATE_FORMAT_YYYYMMDDHHMMSS));
-
-        // 获取Calendar
-        Calendar calendar = Calendar.getInstance();
-        // 设置时间,当前时间不用设置
-        // calendar.setTime(new Date());
-        // 设置日期为本月最大日期
-        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
-        // 打印
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = getFirstDateOfMonth(Calendar.getInstance().getTime());
-        System.out.println(format.format(date));
-        Date date2 = addMonthToDate(date, 1);
-        System.out.println(format.format(date2));
-        System.out.println(format.format(calendar.getTime()));
-    }
-
     public static Date getFirstDateOfWeek() {
         int mondayPlus;
         Calendar cd = Calendar.getInstance();
@@ -922,5 +844,134 @@ public class DateHelper {
         return sb.toString();
     }
 
+    private static String getStringForPeriod(int t){
+        String m="";
+        if(t>0){
+            if(t<10){
+                m="0"+t;
+            }else{
+                m=t+"";
+            }
+        }else{
+            m="00";
+        }
+        return m;
+    }
 
+    /**
+     * 将毫秒转换成时分秒形式显示
+     * @param t 毫秒
+     * @return HH:mm:ss
+     * @author khy
+     */
+    public static String formatPeriod(int t){
+        if(t<60000){
+            return (t % 60000 )/1000+"秒";
+        }else if((t>=60000)&&(t<3600000)){
+            return getStringForPeriod((t % 3600000)/60000)+":"+getStringForPeriod((t % 60000 )/1000);
+        }else {
+            return getStringForPeriod(t / 3600000)+":"+getStringForPeriod((t % 3600000)/60000)+":"+getStringForPeriod((t % 60000 )/1000);
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Date date1 = convertDate("2017/4/6 15:09:58", DATE_FORMAT_YYYYMMDDHHMMSS2);
+
+        // Date date1 = new Date();
+        // Thread.sleep(5500);
+        // Date date2 = new Date();
+
+        // System.out.println(new BigDecimal(date2.getTime()).subtract(
+        // new BigDecimal(date1.getTime())).divide(
+        // new BigDecimal(1000)).intValue());
+
+        // System.out.println(formatDate(date1,"yyyy/MM/dd HH:mm:ss"));
+        //
+        // System.out.println(compareDate(date1, date2));
+        // System.out.println(compareDate(date2, date2));
+        // System.out.println(compareDate(date2, date1));
+        // System.out.println(getFirstDateOfMonth(new Date()));
+        //
+        // System.out.println(formatDate(addMonthToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
+        // System.out.println(formatDate(addDayToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
+        // System.out.println(formatDate(addHourToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
+        // System.out.println(formatDate(addMinuteToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
+        // System.out.println(formatDate(addSecondToDate(date1,1),"yyyy/MM/dd HH:mm:ss"));
+        //
+        // System.out.println(getYearFromDate(date1));
+        // System.out.println(getMonthFromDate(date1));
+        // System.out.println(getDayFromDate(date1));
+        // System.out.println(getHourFromDate(date1));
+        // System.out.println(getMinuteFromDate(date1));
+        // System.out.println(getSecondFromDate(date1));
+        //
+        // Calendar cal = Calendar.getInstance();
+        // cal.setTime(date1);
+        // Calendar cal3 = (Calendar) cal.clone();
+        // Calendar cal4 = (Calendar) cal.clone();
+        // cal.add(Calendar.DAY_OF_YEAR, 10);
+        // Calendar cal2 = Calendar.getInstance();
+        // cal2.setTime(date2);
+        // cal3.add(Calendar.DAY_OF_YEAR, 2);
+        // cal4.add(Calendar.DAY_OF_YEAR, 4);
+        // System.out.println(date1);
+        // System.out.println(cal.getTime());
+        // System.out.println(getDaysListBetween(cal, cal3).contains(
+        // cal3.getTime()));
+        // System.out.println(getDaysListBetween(cal, cal3)
+        // .contains(cal.getTime()));
+        // System.out.println(getDaysListBetween(cal, cal3).contains(
+        // cal4.getTime()));
+        // System.out.println(compareDate(date1, date2));
+        // System.out.println(compareDate(date2, date2));
+        // System.out.println(compareDate(date2, date1));
+        // System.out.println(getFirstDateOfMonth(new Date()));
+        //
+        // Date date3 = new Date();
+        // Date date4 = DateHelper.addDayToDate(date3,2);
+        //
+        // System.out.println(getRegionDates(date3,date4));
+        // System.out.println(convertDateToString(getDate(2099, 11, 31)));
+        // System.out.println(getAge(getDate(1983, 4, 18)));
+        // System.out.println(getLastMonthFirstDate(getDate(2015, 1, 1)));
+//        System.out.println(getCurrentMonthFirstDate(null));
+        System.out.println(DateHelper.formatDate(date1, DATE_FORMAT_YYYYMMDDHHMMSS));
+
+        // 获取Calendar
+        Calendar calendar = Calendar.getInstance();
+        // 设置时间,当前时间不用设置
+        // calendar.setTime(new Date());
+        // 设置日期为本月最大日期
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+        // 打印
+        DateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = getFirstDateOfMonth(Calendar.getInstance().getTime());
+        System.out.println(format2.format(date));
+        Date date2 = addMonthToDate(date, 1);
+        System.out.println(format2.format(date2));
+        System.out.println(format2.format(calendar.getTime()));
+
+
+
+        //测试时区
+        /*GMT时间（格林尼治标准时间）一般指世界时， 即0时区的区时，比北京时间（东8区）晚8小时；所以
+        GMT时间+8小时所得结果就是北京时间(GMT+08:00)。*/
+
+        //创建日期格式化对象
+        DateFormat format1 = new SimpleDateFormat();
+        //当前时间对象
+        Date curDate = new Date();
+
+        String defaultTimeZoneID = TimeZone.getDefault().getID();//Asia/Shanghai
+        System.out.println("默认时区(中国/上海)：" + defaultTimeZoneID);
+
+        //格式化当前时间并输出到控制台
+        System.out.println("默认时区(中国/上海)：" + format1.format(curDate));
+
+        //在格式化日期前使用一个新的时区
+        String newTimeZoneID = "America/New_York"; //America/New_York
+        format1.setTimeZone(TimeZone.getTimeZone(newTimeZoneID));
+        System.out.println("新的时区(美国/纽约)：" + newTimeZoneID);
+        System.out.println("新的时区(美国/纽约)：" + format1.format(curDate));
+    }
 }
