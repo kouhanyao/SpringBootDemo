@@ -17,6 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/excel")
 public class CsvController {
+
+    /**
+     * 导出csv文件 (来代替导出的excel文件)
+     * @param response
+     * @throws IOException
+     * @throws IllegalAccessException
+     */
     @RequestMapping(value = "")
     public void test2(HttpServletResponse response) throws IOException, IllegalAccessException {
         Msg msg = new Msg("123456789","111,555,55\"jhh\"","aaa");

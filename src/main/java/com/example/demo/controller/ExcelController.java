@@ -19,6 +19,12 @@ import java.util.Map;
 @RequestMapping("excel")
 public class ExcelController {
 
+    /**
+     * 读取excel
+     * @param request
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("readExcel")
     @ResponseBody
     public Map<String, Object> sendMsgToDoctor(HttpServletRequest request) throws Exception {
