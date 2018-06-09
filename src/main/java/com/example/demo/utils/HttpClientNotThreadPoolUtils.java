@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
 
+/**
+ * 参考文档:https://www.cnblogs.com/zhi-leaf/p/8508071.html
+ */
 public class HttpClientNotThreadPoolUtils {
     public static void main(String[] args) {
         HttpClientNotThreadPoolUtils httpClientNotThreadPoolUtils = new HttpClientNotThreadPoolUtils();
