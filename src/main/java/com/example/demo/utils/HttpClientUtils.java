@@ -51,6 +51,7 @@ public class HttpClientUtils {
         // 将最大连接数增加到msMaxSize
         cm.setMaxTotal(msMaxSize);
         // 将每个路由基础的连接增加到msMaxSize
+        //DefaultMaxPerRout表示单路由的最大并发连接数，假设你的业务系统需要调用A和B这两个外部系统的http接口，那么如果DefaultMaxPerRout=100，那么调用A系统的http接口时，最大并发数就是100。代码如下：
         cm.setDefaultMaxPerRoute(msMaxSize);
     }
 
