@@ -2,7 +2,6 @@ package com.example.demo.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -42,21 +41,26 @@ public class HttpClientUtils {
         public void onProgress(int progress);
     }
 
-    private CloseableHttpClient httpClient;
+    private PoolingHttpClientConnectionManager cm;
 
     static volatile HttpClientUtils httpClientUtils = null;
 
     private HttpClientUtils() {
         //连接池管理器
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+        cm = new PoolingHttpClientConnectionManager();
         // 将最大连接数增加到msMaxSize
         cm.setMaxTotal(msMaxSize);
         // 将每个路由基础的连接增加到msMaxSize
         cm.setDefaultMaxPerRoute(msMaxSize);
-        this.httpClient = HttpClients
-                .custom()
+    }
+
+    public CloseableHttpClient getHttpClient() {
+        CloseableHttpClient httpClient = HttpClients.custom()
                 .setConnectionManager(cm)
                 .build();
+
+        /*CloseableHttpClient httpClient = HttpClients.createDefault();//如果不采用连接池就是这种方式获取连接*/
+        return httpClient;
     }
 
     public static HttpClientUtils getInstance() {
@@ -104,7 +108,7 @@ public class HttpClientUtils {
         try {
             HttpGet httpGet = new HttpGet(url);
             setGetHead(httpGet, headMap);
-            CloseableHttpResponse response1 = httpClient.execute(httpGet);
+            CloseableHttpResponse response1 = getHttpClient().execute(httpGet);
             try {
                 System.out.println(response1.getStatusLine());
                 HttpEntity httpEntity = response1.getEntity();
@@ -122,14 +126,16 @@ public class HttpClientUtils {
                         progress.onProgress((int) (totalRead * 100 / contentLength));
                     }
                 }
+                is.close();
                 FileOutputStream fos = new FileOutputStream(filePath);
                 output.writeTo(fos);
                 output.flush();
                 output.close();
                 fos.close();
-                EntityUtils.consume(httpEntity);
             } finally {
-                response1.close();
+                if (response1 != null) {
+                    response1.close();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,11 +161,13 @@ public class HttpClientUtils {
     public String httpGet(String url, Map<String, String> headMap) throws Exception {
         HttpGet httpGet = new HttpGet(url);
         setGetHead(httpGet, headMap);
-        CloseableHttpResponse response1 = httpClient.execute(httpGet);
+        CloseableHttpResponse response1 = getHttpClient().execute(httpGet);
         HttpEntity entity = response1.getEntity();
         String responseContent = getRespString(entity);
         EntityUtils.consume(entity);
-        response1.close();
+        if (response1 != null) {
+            response1.close();
+        }
         return responseContent;
     }
 
@@ -179,13 +187,13 @@ public class HttpClientUtils {
         HttpPost httpPost = new HttpPost(url);
         setPostHead(httpPost, headMap);
         setPostParams(httpPost, paramsMap);
-        CloseableHttpResponse response = httpClient.execute(httpPost);
+        CloseableHttpResponse response = getHttpClient().execute(httpPost);
         HttpEntity entity = response.getEntity();
         String responseContent = getRespString(entity);
         EntityUtils.consume(entity);
-        response.close();
-//      CloseableHttpClient httpclient = HttpClients.createDefault();
-//      httpclient.close();
+        if (response != null) {
+            response.close();
+        }
         return responseContent;
     }
 
@@ -249,10 +257,8 @@ public class HttpClientUtils {
      * @throws Exception
      */
     public String uploadFileImpl(String serverUrl, String localFilePath,
-                                 String serverFieldName, Map<String, String> params)
-            throws Exception {
+                                 String serverFieldName, Map<String, String> params) {
         String respStr = null;
-//        CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
             HttpPost httppost = new HttpPost(serverUrl);
             FileBody binFileBody = new FileBody(new File(localFilePath));
@@ -267,19 +273,19 @@ public class HttpClientUtils {
             HttpEntity reqEntity = multipartEntityBuilder.build();
             httppost.setEntity(reqEntity);
 
-            CloseableHttpResponse response = httpClient.execute(httppost);
+            CloseableHttpResponse response = getHttpClient().execute(httppost);
             try {
                 HttpEntity resEntity = response.getEntity();
                 respStr = getRespString(resEntity);
                 EntityUtils.consume(resEntity);
             } finally {
-                response.close();
+                if (response != null) {
+                    response.close();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }/* finally {
-            httpClient.close();
-        }*/
+        }
         System.out.println("resp=" + respStr);
         return respStr;
     }
@@ -330,17 +336,22 @@ public class HttpClientUtils {
      * @return
      * @throws Exception
      */
-    private String getContentFromResponse(HttpResponse response)
-            throws IOException {
+    private String getContentFromResponse(CloseableHttpResponse response) throws IOException {
         String respMsg = null;
-        if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode())
+        if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
             respMsg = EntityUtils.toString(response.getEntity());
+        } else {
+            EntityUtils.consume(response.getEntity());
+        }
+        if (response != null) {
+            response.close();
+        }
         return respMsg;
     }
 
-    public void close() {
+    public void close() throws IOException {
         if (httpClientUtils != null) {
-            httpClientUtils.close();
+            getHttpClient().close();
         }
     }
 
@@ -387,9 +398,9 @@ public class HttpClientUtils {
      *
      * @param url
      * @param params
-     * @throws Exception
+     * @throws IOException
      */
-    public String postJson(String url, Map<String, Object> params) throws Exception {
+    public String postJson(String url, Map<String, Object> params) throws IOException {
         //HttpClient httpClient = new DefaultHttpClient();
         ObjectMapper mapper = new ObjectMapper();
         //http://47.93.200.179:90/wjw/third/upload/inter/uploadConsulting
@@ -399,12 +410,13 @@ public class HttpClientUtils {
         StringEntity requestJson = new StringEntity(mapper.writeValueAsString(params), "utf-8");
         requestJson.setContentType("application/json");
         request.setEntity(requestJson);
-        HttpResponse response = httpClient.execute(request);
+        CloseableHttpResponse response = getHttpClient().execute(request);
         return getContentFromResponse(response);
     }
 
     /**
      * 通过json方式发送post请求
+     *
      * @param url
      * @param json
      * @return
@@ -418,13 +430,15 @@ public class HttpClientUtils {
         entity.setContentEncoding("UTF-8");
         entity.setContentType("application/json");
         httpPost.setEntity(entity);
-        CloseableHttpResponse response = httpClient.execute(httpPost);
+        CloseableHttpResponse response = getHttpClient().execute(httpPost);
         try {
             return EntityUtils.toString(response.getEntity(), Charset.forName("utf-8"));
         } catch (IOException e) {
             throw e;
         } finally {
-            response.close();
+            if (response != null) {
+                response.close();
+            }
         }
     }
 }
