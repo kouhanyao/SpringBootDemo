@@ -27,9 +27,9 @@ public class HttpClientNotThreadPoolUtils {
         System.out.println(result);*/
 
         Map<String, String> params = new HashMap<>();
-        params.put("name", "kouhanyao");
-        params.put("age", "32");
-        params.put("id", "1");
+        params.put("name", "寇含尧");
+        params.put("age", "年龄");
+        params.put("id", "一个");
         params.put("love", "[{\"sex\":\"woman\",\"play\":\"soccer\"}]");
         result = httpClientNotThreadPoolUtils.httpPost("http://127.0.0.1:1201/request/one", params);
         System.out.println(result);
@@ -94,7 +94,7 @@ public class HttpClientNotThreadPoolUtils {
                 client = HttpClients.createDefault();
                 response = client.execute(httpPost);
                 HttpEntity entity = response.getEntity();
-                String result = EntityUtils.toString(entity);
+                String result = EntityUtils.toString(entity, Charset.forName("utf-8"));
                 return result;
             } finally {
                 if (response != null) {
@@ -126,7 +126,7 @@ public class HttpClientNotThreadPoolUtils {
             for (String key : keySet) {
                 nvps.add(new BasicNameValuePair(key, paramsMap.get(key)));
             }
-            httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
         }
     }
 

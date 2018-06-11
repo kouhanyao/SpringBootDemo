@@ -213,7 +213,7 @@ public class HttpClientUtils {
             for (String key : keySet) {
                 nvps.add(new BasicNameValuePair(key, paramsMap.get(key)));
             }
-            httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
         }
     }
 
@@ -340,7 +340,7 @@ public class HttpClientUtils {
     private String getContentFromResponse(CloseableHttpResponse response) throws IOException {
         String respMsg = null;
         if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
-            respMsg = EntityUtils.toString(response.getEntity());
+            respMsg = EntityUtils.toString(response.getEntity(), Charset.forName("utf-8"));
         } else {
             EntityUtils.consume(response.getEntity());
         }
