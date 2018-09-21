@@ -210,7 +210,11 @@ public class ImageUtils {
         /*inputStream.close();*/
     }
 
-    //图片到byte数组
+    /**
+     * 图片到byte数组(本地导入)
+     * @param path
+     * @return
+     */
     public byte[] image2byte(String path){
         byte[] data = null;
         FileImageInputStream input = null;
@@ -235,7 +239,11 @@ public class ImageUtils {
         return data;
     }
 
-    //byte数组到图片
+    /**
+     * byte数组到图片
+     * @param path
+     * @return
+     */
     public void byte2image(byte[] data,String path){
         if(data.length<3||path.equals("")) return;
         try{
@@ -248,6 +256,22 @@ public class ImageUtils {
             ex.printStackTrace();
         }
     }
+
+
+    /**
+     * imageIO导入本地图片到字节
+     *
+     * @param path
+     * @return
+     */
+    public static byte[] image2byteTwo(String path) throws IOException {
+        BufferedImage image = ImageIO.read(new File(path));	//读取1.gif并传输
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        boolean flag = ImageIO.write(image, "gif", out);
+        byte[] b = out.toByteArray();
+        return b;
+    }
+
 
     //byte数组到16进制字符串
     public String byte2string(byte[] data){
