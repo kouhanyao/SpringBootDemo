@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--参考文档  https://www.cnblogs.com/wangdaijun/p/7054114.html-->
+        <!--https://www.cnblogs.com/cb0327/p/5759441.html-->
 
 <!-- 从高到地低 OFF 、 FATAL 、 ERROR 、 WARN 、 INFO 、 DEBUG 、 TRACE 、 ALL -->
 <!-- 日志输出规则  根据当前ROOT 级别，日志输出时，级别高于root默认的级别时  会输出 -->
@@ -185,7 +186,7 @@
 
 
     <!--指定最基础的日志输出级别-->
-    <!--<root>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个loger。-->
+    <!--<root>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个loger。(配置输出通道)-->
     <!-- root级别   DEBUG -->
     <root level="debug">
         <!-- 控制台输出 -->
