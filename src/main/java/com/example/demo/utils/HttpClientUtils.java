@@ -27,6 +27,9 @@ import java.util.*;
 
 
 /**
+ *
+ * 为了释放资源，我们必须手动消耗掉response或者取消连接（使用CloseableHttpResponse类的close方法），见：
+ *          https://blog.csdn.net/zl834205311/article/details/79847746
  * Created by 寇含尧 on 2017/11/2.
  */
 public class HttpClientUtils {
