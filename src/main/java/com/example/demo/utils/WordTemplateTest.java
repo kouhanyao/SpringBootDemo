@@ -137,7 +137,7 @@ public class WordTemplateTest {
         wordDataMap.put("table1", table1);
         wordDataMap.put("table2", table2);
         wordDataMap.put("parametersMap", parametersMap);
-        File file = new File("E:\\test\\借款协议.docx");//改成你本地文件所在目录
+        File file = new File("E:\\test\\测试文档.docx");//改成你本地文件所在目录
 
 
         // 读取word模板
