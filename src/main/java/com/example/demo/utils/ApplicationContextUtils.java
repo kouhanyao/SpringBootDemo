@@ -24,28 +24,36 @@ public class ApplicationContextUtils implements ApplicationContextAware {
         return currentContext;
     }
 
+    /**
+     * 按名字获取bean
+     *
+     * @param name
+     * @param <T>
+     * @return 指定的bean实例
+     * @throws BeansException
+     */
     public static <T> T getBean(String name) throws BeansException {
         return (T) currentContext.getBean(name);
     }
 
     /**
-     * 按类型获取Bean实例
+     * 按类型获取bean
      *
      * @param requiredType 类型
      * @param <T>          类型
-     * @return Bean实例
+     * @return 指定的bean实例
      */
     public static <T> T getBean(Class<T> requiredType) {
         return currentContext.getBean(requiredType);
     }
 
     /**
-     * 按类型和参数获取Bean实例
+     * 按类型和参数获取bean
      *
      * @param requiredType 类型
      * @param args         参数
      * @param <T>          类型
-     * @return 指定的Bean实例
+     * @return 指定的bean实例
      */
     public static <T> T getBean(Class<T> requiredType, Object... args) {
         return currentContext.getBean(requiredType, args);
